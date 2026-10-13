@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestra Historia — 365 Días Juntos ❤️</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            roseBlush: '#fff1f2',
+            roseMist: '#ffe4e6',
+            romanticPink: '#f43f5e',
+            wineVelvet: '#881337',
+            softGold: '#d4af37',
+            deepBurgundy: '#4c0519'
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            script: ['"Great Vibes"', 'cursive'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #fdf2f2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f43f5e;
+      border-radius: 4px;
+    }
+
+    /* Glassmorphism Classes */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 30px rgba(225, 29, 72, 0.08);
+    }
+    .glass-card-dark {
+      background: rgba(40, 15, 25, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Vinyl Spinning Animation */
+    @keyframes spinDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spinDisc 9s linear infinite;
+    }
+    .paused {
+      animation-play-state: paused;
+    }
+
+    /* Floating particles background */
+    #ambientCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Wax seal pulse */
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(225, 29, 72, 0.5);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 30px rgba(225, 29, 72, 0.85);
+      }
+    }
+    .wax-pulse {
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+
+    /* Polaroid subtle tilt */
+    .polaroid {
+      transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .polaroid:hover {
+      transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
+      box-shadow: 0 20px 35px -8px rgba(136, 19, 55, 0.22);
+      z-index: 20;
+    }
+  </style>
+</head>
+<body class="bg-[#fef9f8] text-[#331d24] font-sans antialiased overflow-x-hidden selection:bg-roseMist selection:text-wineVelvet">
+
+  <!-- Floating Ambient Particles Canvas -->
+  <canvas id="ambientCanvas"></canvas>
+
+  <div id="introOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-[#24060d] transition-opacity duration-1000 p-4">
+    <!-- Ambient Background Glow -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#670f26]/70 via-[#27050e] to-[#120106] pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-lg w-full text-center flex flex-col items-center">
+      <p class="font-script text-softGold text-3xl md:text-4xl mb-2 drop-shadow">Para la mujer de mi vida...</p>
+      <h1 class="font-serif italic text-white/90 text-2xl md:text-3xl font-light mb-8 tracking-wide">Un año construyendo nuestra magia</h1>
+
+      <!-- Physical Interactive Envelope Container -->
+      <div id="envelopeWrapper" onclick="openEnvelope()" class="cursor-pointer group relative flex flex-col items-center">
+        <div class="w-72 h-48 md:w-80 md:h-52 bg-gradient-to-br from-[#d9777f] to-[#be123c] rounded-lg shadow-2xl relative flex items-center justify-center border border-white/20 transition-transform duration-300 group-hover:scale-105">
+          <!-- Envelope Flap Top -->
+          <div class="absolute top-0 left-0 w-0 h-0 border-l-[144px] md:border-l-[160px] border-l-transparent border-r-[144px] md:border-r-[160px] border-r-transparent border-t-[100px] md:border-t-[115px] border-t-[#9f1239] origin-top transition-transform duration-700" id="envelopeFlap"></div>
+          
+          <!-- Wax Seal Button -->
+          <div class="relative z-20 w-16 h-16 rounded-full bg-gradient-to-tr from-[#991b1b] to-[#dc2626] wax-pulse border-2 border-softGold/60 flex items-center justify-center text-white shadow-xl">
+            <svg class="w-8 h-8 fill-current drop-shadow" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+        </div>
+        <span class="mt-6 inline-flex items-center gap-2 text-roseMist/90 font-medium text-sm tracking-wider uppercase bg-white/10 px-5 py-2 rounded-full border border-white/15 backdrop-blur-md group-hover:bg-white/20 transition-all">
+          <span class="w-2 h-2 rounded-full bg-romanticPink animate-ping"></span>
+          Toca para abrir la carta
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div id="mainExperience" class="min-h-screen opacity-0 transition-opacity duration-1000 flex flex-col items-center">
+    
+    <!-- Top Sticky Floating Ribbon / Audio Pill -->
+    <header class="sticky top-4 z-40 w-11/12 max-w-5xl">
+      <div class="glass-card rounded-full px-5 py-3 flex items-center justify-between shadow-lg">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">💍</span>
+          <span class="font-serif italic text-wineVelvet font-bold text-lg hidden sm:inline">Nuestro Primer Año</span>
+        </div>
+        <!-- Fast Navigation Quicklinks -->
+        <nav class="flex items-center gap-4 text-xs md:text-sm font-medium text-[#701a35]">
+          <a href="#letterSection" class="hover:text-romanticPink transition-colors">Carta</a>
+          <a href="#timelineSection" class="hover:text-romanticPink transition-colors">Historia</a>
+          <a href="#gallerySection" class="hover:text-romanticPink transition-colors">Galería</a>
+          <a href="#vaultSection" class="text-romanticPink font-bold hover:underline">El Regalo ✨</a>
+        </nav>
+        <!-- Ambient Sound Toggle Button -->
+        <button id="audioToggleBtn" onclick="toggleAudio()" class="flex items-center gap-2 bg-roseMist hover:bg-rose-200 text-wineVelvet px-3 py-1.5 rounded-full text-xs font-semibold transition-all shadow-sm">
+          <span id="audioIcon">▶️</span>
+          <span id="audioStatusText">Música</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="w-full max-w-5xl px-4 pt-12 pb-16 flex flex-col items-center text-center">
+      <div class="inline-block mb-3 px-4 py-1.5 bg-rose-100 border border-rose-200 text-wineVelvet rounded-full text-xs md:text-sm font-semibold tracking-widest uppercase">
+        365 Días • 1 Amor Eterno
+      </div>
+      
+      <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-wineVelvet leading-tight mb-4">
+        Contigo, la vida sabe a <span class="font-script text-romanticPink text-5xl sm:text-7xl md:text-8xl block md:inline font-normal mt-1">magia</span>
+      </h1>
+      
+      <p class="max-w-xl text-stone-600 text-sm sm:text-base mb-10 font-normal leading-relaxed">
+        Cada segundo a tu lado desde aquel primer momento ha sido un regalo. Aquí está nuestra historia resumida en sonrisas, canciones y promesas.
+      </p>
+
+      <!-- Centerpiece Editorial Couple Frame -->
+      <div class="relative w-full max-w-sm sm:max-w-md p-4 bg-white rounded-2xl shadow-2xl border border-stone-200 rotate-[-1deg] hover:rotate-0 transition-transform duration-500">
+        <div class="relative w-full h-80 sm:h-96 rounded-xl overflow-hidden bg-rose-50 flex items-center justify-center">
+          <img 
+            id="heroCouplePhoto" 
+            src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1200&auto=format&fit=crop" 
+            alt="Nosotros" 
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            onerror="this.src='https://placehold.co/800x1000/ffe4e6/881337?text=Nuestra+Foto+Juntos'"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-5">
+            <div class="text-left text-white">
+              <span class="text-xs uppercase tracking-widest font-semibold text-rose-200">Desde el primer instante</span>
+              <p class="font-script text-3xl text-softGold">Tu y Yo</p>
+            </div>
+          </div>
+        </div>
+        <div class="pt-3 pb-1 text-center font-serif italic text-stone-500 text-sm">
+          "El lugar más seguro y feliz del mundo es a tu lado."
+        </div>
+      </div>
+    </section>
+
+    <section class="w-full max-w-4xl px-4 py-8">
+      <div class="glass-card rounded-3xl p-6 sm:p-10 text-center relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-32 h-32 bg-romanticPink/10 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-softGold/20 rounded-full blur-2xl"></div>
+        
+        <span class="text-xs font-bold tracking-widest text-romanticPink uppercase">Reloj de Nuestra Historia</span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-wineVelvet mt-1 mb-8">Tiempo amándonos sin pausa</h2>
+
+        <!-- Counter Numeric Tiles -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+            <span id="counterDays" class="block font-serif text-3xl sm:text-5xl font-bold text-wineVelvet">365</span>
+            <span class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Días</span>
+          </div>
+          <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+            <span id="counterHours" class="block font-serif text-3xl sm:text-5xl font-bold text-wineVelvet">00</span>
+            <span class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Horas</span>
+          </div>
+          <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+            <span id="counterMinutes" class="block font-serif text-3xl sm:text-5xl font-bold text-wineVelvet">00</span>
+            <span class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Minutos</span>
+          </div>
+          <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 shadow-sm">
+            <span id="counterSeconds" class="block font-serif text-3xl sm:text-5xl font-bold text-romanticPink">00</span>
+            <span class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Segundos</span>
+          </div>
+        </div>
+        <p class="mt-6 text-xs text-stone-500 italic">...y contando cada latido de lo que aún nos falta por construir.</p>
+      </div>
+    </section>
+
+    <section class="w-full max-w-3xl px-4 py-12">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white shadow-xl relative">
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+          
+          <!-- Spinning Vinyl / Album Cover -->
+          <div class="relative w-36 h-36 flex-shrink-0 flex items-center justify-center">
+            <!-- Vinyl Record Body -->
+            <div id="vinylDisk" class="w-36 h-36 rounded-full bg-[#111] border-4 border-stone-800 shadow-2xl flex items-center justify-center animate-spin-slow paused relative">
+              <!-- Vinyl Groove Lines -->
+              <div class="w-28 h-28 rounded-full border border-white/10 flex items-center justify-center">
+                <div class="w-20 h-20 rounded-full border border-white/15 flex items-center justify-center">
+                  <!-- Custom Song Center Thumbnail -->
+                  <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-softGold shadow-inner">
+                    <img 
+                      src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=400&auto=format&fit=crop" 
+                      alt="Canción" 
+                      class="w-full h-full object-cover"
+                      onerror="this.src='https://placehold.co/200x200/be123c/ffffff?text=♫'"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Center Spindle Hole -->
+            <div class="absolute w-3.5 h-3.5 rounded-full bg-white border border-stone-400 pointer-events-none"></div>
+          </div>
+
+          <!-- Song Meta & Progress Controls -->
+          <div class="w-full flex flex-col justify-center text-center sm:text-left">
+            <div class="flex items-center justify-center sm:justify-between mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-romanticPink bg-rose-100 px-2.5 py-0.5 rounded-full">Nuestra Canción</span>
+              <span class="text-xs text-stone-400 hidden sm:inline">Spotify Player Simulation</span>
+            </div>
+            
+            <h3 class="font-serif text-2xl font-bold text-wineVelvet">I risk it all for you / Amor de Mi Vida</h3>
+            <p class="text-sm text-stone-500 font-medium mb-4">Dedicada con cada latido para ti</p>
+
+            <!-- Playback Bar -->
+            <div class="w-full bg-roseMist rounded-full h-2 mb-2 overflow-hidden cursor-pointer" onclick="scrubAudio(event)" id="audioProgressBarWrapper">
+              <div id="audioProgressBar" class="bg-gradient-to-r from-romanticPink to-softGold h-full rounded-full transition-all duration-200" style="width: 32%;"></div>
+            </div>
+
+            <div class="flex justify-between text-[11px] text-stone-400 mb-3 font-semibold">
+              <span id="playerCurrentTime">01:14</span>
+              <span id="playerTotalTime">03:45</span>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="flex items-center justify-center sm:justify-start gap-4">
+              <button onclick="rewindAudio()" class="text-stone-600 hover:text-romanticPink text-lg transition-transform active:scale-95">⏮️</button>
+              <button id="playerPlayBtn" onclick="toggleAudio()" class="w-12 h-12 rounded-full bg-romanticPink hover:bg-wineVelvet text-white flex items-center justify-center shadow-lg transition-all active:scale-90">
+                <svg id="playBtnSvg" class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+              <button onclick="forwardAudio()" class="text-stone-600 hover:text-romanticPink text-lg transition-transform active:scale-95">⏭️</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Lyrics Snippet Box -->
+        <div class="mt-6 pt-4 border-t border-rose-100 text-center font-serif italic text-stone-600 text-sm sm:text-base">
+          <span id="syncedLyrics">"It's crazy but it's true, there's nothing I won't do ...  " ✨</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="letterSection" class="w-full max-w-3xl px-4 py-12">
+      <div class="bg-white rounded-3xl p-7 sm:p-12 shadow-xl border border-rose-100 relative">
+        <!-- Stamp Decoration -->
+        <div class="absolute top-6 right-6 w-16 h-14 border-2 border-dashed border-rose-300 rounded flex flex-col items-center justify-center text-[10px] text-romanticPink font-bold uppercase rotate-6">
+          <span>365 Días</span>
+          <span>Amor Real</span>
+        </div>
+
+        <span class="font-script text-3xl text-romanticPink">Mi amor,</span>
+        <h2 class="font-serif text-3xl font-bold text-wineVelvet mt-1 mb-6">Para la persona que cambió mi mundo</h2>
+
+        <!-- Realistic Typewritten Text -->
+        <div class="font-serif text-lg text-stone-700 leading-relaxed space-y-4">
+          <p id="liveTypedParagraph" class="min-h-[140px] whitespace-pre-wrap"></p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-rose-100 flex items-center justify-between">
+          <div class="text-xs text-stone-400">Escrito desde el corazón</div>
+          <div class="font-script text-2xl text-wineVelvet">Siempre tuyo ❤️</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="timelineSection" class="w-full max-w-4xl px-4 py-16">
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold tracking-widest text-romanticPink uppercase">Nuestra Trayectoria</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-wineVelvet mt-1">Hitos que nos trajeron hasta aquí</h2>
+        <p class="text-stone-500 text-sm mt-2">Los momentos exactos en los que supe que eras tú.</p>
+      </div>
+
+      <div class="relative border-l-2 border-rose-200 ml-4 md:ml-32 space-y-12">
+        
+        <!-- Timeline Item 1 -->
+        <div class="relative pl-8 md:pl-10 group">
+          <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-white border-2 border-romanticPink flex items-center justify-center text-xs shadow-md group-hover:scale-110 transition-transform">
+            ☕
+          </div>
+          <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-xs font-bold text-romanticPink uppercase tracking-wide">El Primer Café • Día 1</span>
+            <h3 class="font-serif text-xl font-bold text-wineVelvet mt-0.5">Donde el tiempo se detuvo</h3>
+            <p class="text-stone-600 text-sm mt-2 leading-relaxed">
+              Recuerdo los nervios, tu sonrisa tímida y cómo dos horas pasaron como si fueran dos segundos. Ahí empezó todo.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="relative pl-8 md:pl-10 group">
+          <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-white border-2 border-romanticPink flex items-center justify-center text-xs shadow-md group-hover:scale-110 transition-transform">
+            ✨
+          </div>
+          <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-xs font-bold text-romanticPink uppercase tracking-wide">Nuestra Primera Salida Oficial</span>
+            <h3 class="font-serif text-xl font-bold text-wineVelvet mt-0.5">La primera vez de la mano</h3>
+            <p class="text-stone-600 text-sm mt-2 leading-relaxed">
+              Caminando sin prisa, hablando de todo y de nada. Ese día me di cuenta de que tu mano encajaba a la perfección con la mía.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="relative pl-8 md:pl-10 group">
+          <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-white border-2 border-romanticPink flex items-center justify-center text-xs shadow-md group-hover:scale-110 transition-transform">
+            💖
+          </div>
+          <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-xs font-bold text-romanticPink uppercase tracking-wide">El Día Que Dijimos "Sí"</span>
+            <h3 class="font-serif text-xl font-bold text-wineVelvet mt-0.5">El comienzo oficial</h3>
+            <p class="text-stone-600 text-sm mt-2 leading-relaxed">
+              Hacerte la pregunta y escuchar tu respuesta fue el momento más feliz. Empezó la aventura más hermosa de mi vida.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="relative pl-8 md:pl-10 group">
+          <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-white border-2 border-softGold flex items-center justify-center text-xs shadow-md group-hover:scale-110 transition-transform">
+            💍
+          </div>
+          <div class="glass-card rounded-2xl p-5 border-2 border-softGold/40 bg-gradient-to-r from-white to-amber-50/50 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-xs font-bold text-softGold uppercase tracking-wide">Hoy • 365 Días Después</span>
+            <h3 class="font-serif text-xl font-bold text-wineVelvet mt-0.5">Una promesa para siempre</h3>
+            <p class="text-stone-600 text-sm mt-2 leading-relaxed">
+              Un año de aprender, reír y amarnos cada día más fuerte. Hoy celebramos lo que fuimos y prometemos todo lo que seremos.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="gallerySection" class="w-full max-w-5xl px-4 py-16">
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold tracking-widest text-romanticPink uppercase">Álbum de Recuerdos</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-wineVelvet mt-1">Nuestros momentos favoritos</h2>
+        <p class="text-stone-500 text-sm mt-2">Toca cualquier polaroid para verla en grande con su recuerdo.</p>
+      </div>
+
+      <!-- Polaroid Cards Grid with Subtle Alternating Tilts -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        
+        <!-- Polaroid 1 -->
+        <div onclick="openLightbox(0)" class="polaroid bg-white p-4 pb-6 rounded-lg shadow-lg cursor-pointer transform -rotate-2">
+          <div class="w-full h-64 rounded bg-stone-100 overflow-hidden mb-3">
+            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Recuerdo 1" onerror="this.src='https://placehold.co/600x600/ffe4e6/881337?text=Foto+1'">
+          </div>
+          <p class="font-script text-2xl text-stone-700 text-center">Nuestra primera tarde juntos</p>
+          <span class="block text-center text-[11px] text-stone-400 mt-1 uppercase tracking-wider font-semibold">Tarde de risas</span>
+        </div>
+
+        <!-- Polaroid 2 -->
+        <div onclick="openLightbox(1)" class="polaroid bg-white p-4 pb-6 rounded-lg shadow-lg cursor-pointer transform rotate-2">
+          <div class="w-full h-64 rounded bg-stone-100 overflow-hidden mb-3">
+            <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Recuerdo 2" onerror="this.src='https://placehold.co/600x600/ffe4e6/881337?text=Foto+2'">
+          </div>
+          <p class="font-script text-2xl text-stone-700 text-center">Esa sonrisa que me enamora</p>
+          <span class="block text-center text-[11px] text-stone-400 mt-1 uppercase tracking-wider font-semibold">Un día inolvidable</span>
+        </div>
+
+        <!-- Polaroid 3 -->
+        <div onclick="openLightbox(2)" class="polaroid bg-white p-4 pb-6 rounded-lg shadow-lg cursor-pointer transform -rotate-1">
+          <div class="w-full h-64 rounded bg-stone-100 overflow-hidden mb-3">
+            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Recuerdo 3" onerror="this.src='https://placehold.co/600x600/ffe4e6/881337?text=Foto+3'">
+          </div>
+          <p class="font-script text-2xl text-stone-700 text-center">Tardes cómplices</p>
+          <span class="block text-center text-[11px] text-stone-400 mt-1 uppercase tracking-wider font-semibold">El café de siempre</span>
+        </div>
+
+        <!-- Polaroid 4 -->
+        <div onclick="openLightbox(3)" class="polaroid bg-white p-4 pb-6 rounded-lg shadow-lg cursor-pointer transform rotate-1">
+          <div class="w-full h-64 rounded bg-stone-100 overflow-hidden mb-3">
+            <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Recuerdo 4" onerror="this.src='https://placehold.co/600x600/ffe4e6/881337?text=Foto+4'">
+          </div>
+          <p class="font-script text-2xl text-stone-700 text-center">Nuestras locuras</p>
+          <span class="block text-center text-[11px] text-stone-400 mt-1 uppercase tracking-wider font-semibold">Siendo nosotros</span>
+        </div>
+
+        <!-- Polaroid 5 -->
+        <div onclick="openLightbox(4)" class="polaroid bg-white p-4 pb-6 rounded-lg shadow-lg cursor-pointer transform -rotate-2">
+          <div class="w-full h-64 rounded bg-stone-100 overflow-hidden mb-3">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Recuerdo 5" onerror="this.src='https://placehold.co/600x600/ffe4e6/881337?text=Foto+5'">
+          </div>
+          <p class="font-script text-2xl text-stone-700 text-center">Tú, la más hermosa</p>
+          <span class="block text-center text-[11px] text-stone-400 mt-1 uppercase tracking-wider font-semibold">Mi vista favorita</span>
+        </div>
+
+        <!-- Polaroid 6 -->
+        <div onclick="openLightbox(5)" class="polaroid bg-white p-4 pb-6 rounded-lg shadow-lg cursor-pointer transform rotate-3">
+          <div class="w-full h-64 rounded bg-stone-100 overflow-hidden mb-3">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Recuerdo 6" onerror="this.src='https://placehold.co/600x600/ffe4e6/881337?text=Foto+6'">
+          </div>
+          <p class="font-script text-2xl text-stone-700 text-center">Por miles de días más</p>
+          <span class="block text-center text-[11px] text-stone-400 mt-1 uppercase tracking-wider font-semibold">Para siempre</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="vaultSection" class="w-full max-w-4xl px-4 py-20 text-center">
+      <div class="relative glass-card rounded-3xl p-8 sm:p-14 border border-rose-200 overflow-hidden shadow-2xl">
+        <div class="inline-block mb-3 px-4 py-1 bg-softGold/20 border border-softGold/40 text-stone-800 rounded-full text-xs font-bold uppercase tracking-widest">
+          El Gran Momento
+        </div>
+        <h2 class="font-serif text-3xl sm:text-5xl font-bold text-wineVelvet mb-4">
+          Tengo una pregunta especial para ti...
+        </h2>
+        <p class="max-w-lg mx-auto text-stone-600 text-sm sm:text-base mb-8">
+          Detrás de cada línea de código, de cada día vivido y de cada plan a futuro, hay un sentimiento que no deja de crecer.
+        </p>
+
+        <!-- Unopened Treasure Chest Button -->
+        <div id="unopenedGiftBox" class="flex flex-col items-center">
+          <button onclick="revealPromiseRing()" class="group relative px-8 py-5 rounded-full bg-gradient-to-r from-romanticPink via-rose-600 to-wineVelvet text-white font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+            <span class="text-2xl group-hover:rotate-12 transition-transform">🎁</span>
+            <span>Toca para abrir tu regalo</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>
+          </button>
+        </div>
+
+        <!-- Hidden Revealed Ring Showcase Container -->
+        <div id="revealedRingBox" class="hidden transition-all duration-700 pt-6">
+          <div class="max-w-md mx-auto bg-gradient-to-b from-[#24060d] to-[#120106] text-white p-8 rounded-3xl shadow-2xl border-2 border-softGold/50 relative overflow-hidden">
+            <!-- Light beam flare -->
+            <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-softGold/30 rounded-full blur-3xl"></div>
+            
+            <div class="relative z-10 flex flex-col items-center">
+              <!-- Ring Icon Render -->
+              <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-rose-900 to-red-800 border-2 border-softGold flex items-center justify-center text-4xl shadow-inner mb-4 animate-bounce">
+                💍
+              </div>
+              
+              <span class="text-xs uppercase tracking-widest text-softGold font-semibold">Anillo de Promesa Pandora "You & Me"</span>
+              <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-1 mb-3">Mi promesa para ti</h3>
+              
+              <p class="text-rose-100/90 text-sm font-light leading-relaxed mb-6 italic">
+                "Este anillo no es solo plata y un corazón rojo; es el recordatorio físico de que elijo estar contigo hoy, mañana y en cada uno de los capítulos que vengan. Prometo cuidarte, escucharte, hacerte reír y nunca soltar tu mano."
+              </p>
+
+              <div class="p-4 rounded-xl bg-white/10 border border-white/20 text-xs text-rose-200">
+                ❤️ <strong>¡Feliz Primer Aniversario, Princesa!</strong> ❤️
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="w-full py-8 text-center text-stone-400 text-xs">
+      <p>Diseñado y programado con amor para ti • Hecho con código y el corazón</p>
+      <p class="mt-1 font-serif italic text-stone-500">1 Año Juntos • Por siempre</p>
+    </footer>
+
+  </div>
+
+  <div id="photoLightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
+    <div class="relative max-w-lg w-full bg-white rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <button onclick="closeLightbox()" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center font-bold text-lg hover:bg-black transition-colors">
+        ✕
+      </button>
+      <div class="w-full h-80 sm:h-96 bg-stone-900 flex items-center justify-center">
+        <img id="lightboxImg" src="" alt="Recuerdo ampliado" class="w-full h-full object-cover">
+      </div>
+      <div class="p-5 text-center">
+        <h4 id="lightboxTitle" class="font-script text-3xl text-wineVelvet">Nuestra Tarde</h4>
+        <p id="lightboxCaption" class="text-xs text-stone-500 mt-1 uppercase tracking-wider font-semibold">Fecha especial</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* -------------------------------------------------------------
+       1. CONFIGURACIÓN DE FECHA & CARTA PERSONALIZADA
+       ------------------------------------------------------------- */
+    // Ajuste de fecha del aniversario (Año, Mes [0-11], Día, Hora, Minutos)
+    // Ejemplo: 12 de Octubre de 2025
+    const anniversaryStartDate = new Date(2025, 9, 12, 0, 0, 0);
+
+    const letterMessage = `Hola mi niña bonita...
+
+Hoy cumplimos 365 días desde que decidimos emprender este camino juntos. Si soy honesto, este ha sido el año más lindo, divertido y lleno de paz de toda mi vida.
+
+Gracias por cada abrazo cuando lo necesité, por tus risas tontas que me alegran el día, por tu apoyo incondicional y por convertirte en mi lugar seguro.
+
+Este pequeño sitio web lo hice pensando en cada detalle de nosotros, porque quería que vieras que la tecnología y lo que hago también puede hablar de amor cuando se trata de ti.
+
+Este año apenas es la introducción de la historia más hermosa que estamos escribiendo juntos. Te amo con todo mi ser.`;
+
+    /* -------------------------------------------------------------
+       2. EFECTO TYPING WRITER
+       ------------------------------------------------------------- */
+    let typeIndex = 0;
+    function startTypingEffect() {
+      const targetEl = document.getElementById('liveTypedParagraph');
+      targetEl.textContent = '';
+      typeIndex = 0;
+
+      function typeChar() {
+        if (typeIndex < letterMessage.length) {
+          targetEl.textContent += letterMessage.charAt(typeIndex);
+          typeIndex++;
+          setTimeout(typeChar, 24);
+        }
+      }
+      typeChar();
+    }
+
+    /* -------------------------------------------------------------
+       3. APERTURA DE SOBRE CON TRANSICIÓN SUAVE
+       ------------------------------------------------------------- */
+    let envelopeOpened = false;
+    function openEnvelope() {
+      if (envelopeOpened) return;
+      envelopeOpened = true;
+
+      // Animar solapa
+      const flap = document.getElementById('envelopeFlap');
+      if (flap) flap.style.transform = 'rotateX(180deg)';
+
+      // Disparar confeti inicial suave
+      confetti({
+        particleCount: 40,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#ffe4e6', '#f43f5e', '#d4af37']
+      });
+
+      // Desvanecer overlay y mostrar experiencia principal
+      setTimeout(() => {
+        const overlay = document.getElementById('introOverlay');
+        const main = document.getElementById('mainExperience');
+        
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          main.style.opacity = '1';
+          startTypingEffect();
+          initLiveCounter();
+          // Iniciar suavemente audio sintetizado si está habilitado
+			//audio.play().catch(e => console.log("Interacción requerida:", e));
+			toggleAudio();
+        }, 800);
+      }, 700);
+    }
+
+    /* -------------------------------------------------------------
+       4. CONTADOR EN TIEMPO REAL AL SEGUNDO
+       ------------------------------------------------------------- */
+    function initLiveCounter() {
+      function updateTimer() {
+        const now = new Date();
+        const difference = Math.max(0, now - anniversaryStartDate);
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / (1000 * 60)) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+
+        document.getElementById('counterDays').textContent = days;
+        document.getElementById('counterHours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('counterMinutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('counterSeconds').textContent = String(seconds).padStart(2, '0');
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    /* -------------------------------------------------------------
+       5. SISTEMA DE AUDIO (Web Audio API Sintetizado + Reproductor UI)
+       Genera una suave melodía romántica acústica sin requerir archivos mp3 externos.
+       ------------------------------------------------------------- */
+    const myAudio = new Audio('cancion.mp3');
+    myAudio.preload = 'auto';
+    let isPlaying = false;
+
+    // Actualiza la barra de progreso mientras suena la canción
+    myAudio.addEventListener('timeupdate', () => {
+      if (myAudio.duration) {
+        const pct = (myAudio.currentTime / myAudio.duration) * 100;
+        const progressBar = document.getElementById('audioProgressBar');
+        if (progressBar) progressBar.style.width = pct + '%';
+      }
+    });
+
+    // Cuando termina la canción, restablece la UI
+    myAudio.addEventListener('ended', () => {
+      isPlaying = false;
+      updatePlayerUi();
+    });
+
+    function toggleAudio() {
+      if (isPlaying) {
+        myAudio.pause();
+        isPlaying = false;
+      } else {
+        myAudio.play().then(() => {
+          isPlaying = true;
+          updatePlayerUi();
+        }).catch(err => {
+          console.warn("Reproducción bloqueada o archivo no encontrado:", err);
+        });
+      }
+      updatePlayerUi();
+    }
+
+    function updatePlayerUi() {
+      const vinyl = document.getElementById('vinylDisk');
+      const icon = document.getElementById('audioIcon');
+      const statusText = document.getElementById('audioStatusText');
+      const playSvg = document.getElementById('playBtnSvg');
+
+      if (isPlaying) {
+        if (vinyl) vinyl.classList.remove('paused');
+        if (icon) icon.textContent = '⏸️';
+        if (statusText) statusText.textContent = 'Pausar';
+        if (playSvg) playSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      } else {
+        if (vinyl) vinyl.classList.add('paused');
+        if (icon) icon.textContent = '▶️';
+        if (statusText) statusText.textContent = 'Música';
+        if (playSvg) playSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      }
+    }
+
+    // Atrasar 10 segundos
+    function rewindAudio() {
+      myAudio.currentTime = Math.max(0, myAudio.currentTime - 10);
+    }
+
+    // Adelantar 10 segundos
+    function forwardAudio() {
+      if (myAudio.duration) {
+        myAudio.currentTime = Math.min(myAudio.duration, myAudio.currentTime + 10);
+      }
+    }
+
+    // Adelantar / atrasar haciendo clic en la barra de progreso
+    function scrubAudio(e) {
+      const bar = document.getElementById('audioProgressBarWrapper');
+      if (!bar || !myAudio.duration) return;
+      const rect = bar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      myAudio.currentTime = pct * myAudio.duration;
+    }
+
+    /* -------------------------------------------------------------
+       6. LIGHTBOX INTERACTIVO DE FOTOS
+       ------------------------------------------------------------- */
+    const photoData = [
+      {
+        src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1200&auto=format&fit=crop",
+        title: "Nuestra primera tarde juntos",
+        caption: "Aquel día donde descubrimos lo mucho que podíamos reír sin parar."
+      },
+      {
+        src: "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?q=80&w=1200&auto=format&fit=crop",
+        title: "Esa sonrisa que me enamora",
+        caption: "No importa el día ni la hora, verte sonreír me alegra todo el mundo."
+      },
+      {
+        src: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1200&auto=format&fit=crop",
+        title: "Tardes cómplices",
+        caption: "Pláticas eternas que hacen que las horas parezcan minutos a tu lado."
+      },
+      {
+        src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1200&auto=format&fit=crop",
+        title: "Nuestras locuras",
+        caption: "Ser exactamente nosotros sin fingir nada. Nuestro lugar favorito."
+      },
+      {
+        src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop",
+        title: "Tú, la más hermosa",
+        caption: "La mujer más especial, inteligente y tierna que la vida me pudo regalar."
+      },
+      {
+        src: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1200&auto=format&fit=crop",
+        title: "Por miles de días más",
+        caption: "Este solo es nuestro primer aniversario. Todo lo mejor está por venir."
+      }
+    ];
+
+    function openLightbox(index) {
+      const item = photoData[index];
+      if (!item) return;
+
+      document.getElementById('lightboxImg').src = item.src;
+      document.getElementById('lightboxTitle').textContent = item.title;
+      document.getElementById('lightboxCaption').textContent = item.caption;
+
+      const modal = document.getElementById('photoLightbox');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('photoLightbox');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    /* -------------------------------------------------------------
+       7. EL CLÍMAX: APERTURA DEL ANILLO & CONFETI DORADO
+       ------------------------------------------------------------- */
+    function revealPromiseRing() {
+      document.getElementById('unopenedGiftBox').classList.add('hidden');
+      const ringBox = document.getElementById('revealedRingBox');
+      ringBox.classList.remove('hidden');
+
+      // Explosión de confeti dorado y corazones
+      const end = Date.now() + 3.5 * 1000;
+      const colors = ['#d4af37', '#f43f5e', '#ffffff', '#fb7185'];
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+
+    /* -------------------------------------------------------------
+       8. CANVAS DE PARTÍCULAS AMBIENTALES FLOTANTES (CORAZONES & DESTELLOS)
+       ------------------------------------------------------------- */
+    const canvas = document.getElementById('ambientCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 20;
+        this.size = Math.random() * 12 + 6;
+        this.speedY = Math.random() * 0.8 + 0.3;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.4 + 0.15;
+        this.type = Math.random() > 0.4 ? 'heart' : 'star';
+      }
+      update() {
+        this.y -= this.speedY;
+        this.x += this.speedX;
+        if (this.y < -30) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#f43f5e';
+        ctx.font = `${this.size}px serif`;
+        ctx.fillText(this.type === 'heart' ? '♥' : '✦', this.x, this.y);
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 28; i++) {
+      const p = new Particle();
+      p.y = Math.random() * canvas.height;
+      particles.push(p);
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  </script>
+
+<audio id="bgMusic" src="cancion.mp3" preload="auto"></audio>
+</body>
+</html>
